@@ -33,3 +33,48 @@ SELECT * FROM get_fit_now_member
 WHERE id like "48Z%" ORDER BY membership_start_date asc limit 1
 /* lo que hace esto es que del id del principio de la tarjeta lo busca y deja el miembro que
 desde hace mas tiempo esta.*/
+
+
+
+
+
+
+/*ACTIVIDAD 1*/
+SELECT f.title, a.address, c.city, c_t.country FROM film f
+INNER JOIN inventory i ON f.film_id = i.film_id 
+INNER JOIN store s ON i.store_id = s.store_id 
+INNER JOIN address a ON s.address_id = a.address_id 
+INNER JOIN city c ON a.city_id = c.city_id 
+INNER JOIN country c_t ON c.country_id = c_t. country_id
+WHERE  f.title = 'ACADEMY DINOSAUR'
+/*Título de la película a elección, dirección, ciudad y país del local de todos los ejemplares que están sin devolver.*/
+
+
+
+/*ACTVIDAD 2*/
+SELECT f.title, c.name, l.name, f.rating, f.length FROM film f
+INNER JOIN film_category f_c ON f.film_id = f_c.film_id 
+INNER JOIN category c ON f_c.category_id = c.category_id 
+INNER JOIN language l ON f.language_id = l.language_id 
+where length between 60 and 120
+/*Mostrar título, categoría, idioma, rating y duración de las películas que estén entre 1 hs y 2 hs.
+*/
+
+
+
+
+/*ACTIVIDAD 3*/
+SELECT s.first_name, s.last_name, a.address, c.city, c_t.country  FROM staff s
+INNER JOIN address a ON s.address_id = a.address_id 
+INNER JOIN city c ON a.city_id = c.city_id 
+INNER JOIN country c_t ON c.country_id = c_t.country_id 
+/*Mostrar nombre, apellido y dirección (con ciudad y país) de los encargados del local.*/
+
+
+/*ACTIVIDAD 4*/
+SELECT * FROM film f
+INNER JOIN inventory i ON f.film_id = i.film_id 
+INNER JOIN rental r ON i.inventory_id = r.inventory_id 
+whe
+/* no terminado */
+
