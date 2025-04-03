@@ -72,9 +72,119 @@ INNER JOIN country c_t ON c.country_id = c_t.country_id
 
 
 /*ACTIVIDAD 4*/
-SELECT * FROM film f
+SELECT title,min(return_date), max(return_date) FROM film f
 INNER JOIN inventory i ON f.film_id = i.film_id 
 INNER JOIN rental r ON i.inventory_id = r.inventory_id 
-whe
-/* no terminado */
+/*muestra el nombre de una pelicula con la fecha(min)minima y la(mas maxima) de entrega.*/
 
+
+
+/*ACTIVIDAD 5*/
+/*inner join sirve para unir 2 tablas, lo comparas cuando hay el mismo nombre repetido en la otra tabla*/
+/*si se pueden unir todas las tablas
+film se une con film_category por film_id
+film_category se une con category por category_id
+film se une con languaje por languaje_id
+fil se une con film_actor por film_id
+film_actor se une con actor por actor_id
+film se une con inventory por film_id
+film_id se une con film_text por film_id
+inventory se une con rental por inventory_id
+rental se une con payment por staff_id
+payment se une con staff por staff_id
+staff se une con store por store_id
+store se une con customer por store_id
+customer se une con address por address_id
+address se une con con city por city_id 
+city se une con country por country_id
+*/
+
+
+
+/*ACTIVIDAD 6*/
+SELECT count(*) rating/*para contar por ejemplo los titulos*/
+FROM film f
+GROUP BY rating
+/*Cuantas peliculas hay en rating*/
+
+/*ACTIVIDAD 7*/
+SELECT count(*) as cant_pelicula, ca.name  
+FROM film f
+INNER JOIN film_category c ON f.film_id = c.film_id 
+INNER JOIN category ca ON c.category_id = ca.category_id 
+GROUP BY ca.name
+/*muestra la cantidad de peliculas que hay en cada categoria*/
+
+/*ACTIVIDAD 8*/
+SELECT a.first_name,a.last_name,count(a.actor_id) as cant_actor, f.title 
+FROM film f
+INNER JOIN film_actor fa ON f.film_id = fa.film_id 
+INNER JOIN actor a ON fa.actor_id = a.actor_id 
+GROUP BY f.film_id
+ORDER by cant_actor desc limit 10
+/*lo que hace es que selecciona el nombre y apellido de la lista actor, selecciona todos los id de los 
+actoresy imprime el titulo de la pelicula luego usamos innejoin para juntar las listas despues agrupamos
+los id de film y ordenamos la cantidad de actores de mayor a menor.*/
+
+
+/*ACTIVIDAD 9*/
+SELECT a.address, c.city, co.country,count(i.inventory_id)
+FROM inventory i
+INNER JOIN store s ON i.store_id = s.store_id 
+INNER JOIN address a ON s.address_id = a.address_id 
+INNER JOIN city c ON a.city_id = c.city_id
+INNER JOIN country co ON c.country_id = co.country_id  
+GROUP by a.address
+/*¿Cuántos ejemplares (inventory) en total hay en cada local?  Como no hay nombre del local,
+ poner en su lugar la dirección incluyendo ciudad y país además de la cantidad*/
+ 
+
+
+ /*ACTIVIDAD 10*/
+ SELECT a.address, c.city, co.country,count(f.film_id)
+FROM film f
+INNER JOIN inventory i ON f.film_id = i.film_id 
+INNER JOIN store s ON i.store_id = s.store_id 
+INNER JOIN address a ON s.address_id = a.address_id 
+INNER JOIN city c ON a.city_id = c.city_id
+INNER JOIN country co ON c.country_id = co.country_id  
+GROUP by a.address
+
+
+/*ACTIVIDAD 11*/
+SELECT AVG(f.rental_duration * f.rental_rate ) AS costo_promedio, c.name
+FROM film f
+INNER JOIN film_category fc ON f.film_id = fc.film_id 
+INNER JOIN category c ON fc.category_id = c.category_id 
+GROUP by c.name
+/*lo que hace esto es que usa ek avg para sacar el promedio de la multiplicacion que hicimos
+y le damos un nombre, accedemoos a las otras tablas con el inner join y en el primer renglon ponemos c.name
+para imprimir el nombre de la categoria de las peliculas y luego usamos el group by para agrupar las filas*/
+
+
+/*ACTIVIDAD 12*/
+SELECT f.rental_duration as dias, f.rental_rate cost_dias, (f.rental_duration * f.rental_rate) as cost_total, min(return_date) as fecha_min, max(rental_date) as fecha_max  
+FROM film f
+INNER JOIN inventory i ON f.film_id = i.film_id 
+INNER JOIN rental r ON i.inventory_id = r.inventory_id
+WHERE f.title 'ALABAMA DEVIL'
+/*no terminado*/
+
+
+
+
+
+
+
+
+
+
+SELECT AVG(), rating from film
+GROUP by rating
+
+/* SELECT rental_duration * rental_date AS resultado avg(resultado)
+FROM film f
+INNER JOIN film_category fc ON f.film_id = fc.film_id 
+INNER JOIN category c ON fc.category_id = c.category_id 
+GROUP by film
+*/
