@@ -167,12 +167,59 @@ SELECT f.rental_duration as dias, f.rental_rate cost_dias, (f.rental_duration * 
 FROM film f
 INNER JOIN inventory i ON f.film_id = i.film_id 
 INNER JOIN rental r ON i.inventory_id = r.inventory_id
-WHERE f.title 'ALABAMA DEVIL'
-/*no terminado*/
+WHERE f.title = 'ALABAMA DEVIL'
+/**/
 
 
 
+/*ACTIVIDAD 13*/
+SELECT f.title, f.length, c.name  
+FROM film f
+INNER JOIN film_category fc on f.film_id = fc.film_id
+INNER JOIN category c on fc.category_id = c.category_id
+ORDER by length desc
 
+/*ACTIVIDAD 14*/
+--Nombre de las peliculas que arranquen‘’w’’ con al menos 5 actores
+SELECT f.title, a.first_name, count(a.actor_id) as cant_Actor
+FROM film f
+INNER JOIN film_actor fa on f.film_id = fa.film_id
+INNER JOIN actor a on fa.actor_id = a.actor_id
+WHERE title like "W%"
+GROUP BY f.film_id               --separa por grupo 
+HAVING  cant_Actor >=5                         --sirve para filtar unicamente campos contados(AVG,SUM,COUNT)
+ORDER BY cant_Actor asc 
+
+/*ACTIVIDAD 15*/
+ --Calcular la suma total de los pagos (amount) con nombre y apellido de cada cliente.
+SELECT c.first_name, c.last_name, sum(p.amount) as cant_pago
+FROM customer c
+INNER JOIN payment p on c.customer_id = p.customer_id
+GROUP BY c.first_name, c.last_name               --separa por grupo 
+ORDER by cant_pago ASC
+
+
+/*ACTIVIDAD 16*/
+-- Nombre de la pelicula, duración y nombre del actor de las peliculas más cortas.
+SELECT f.title, f.length as pelisCortas, a.first_name
+FROM film f
+INNER JOIN film_actor fa on f.film_id = fa.film_id
+INNER JOIN actor a on fa.actor_id = a.actor_id
+WHERE f.length < 100
+ORDER BY f.length ASC
+
+
+/*ACTIVIDAD 17*/
+--apellido del cliente con su ciudad, pais, direccion, sus alquileres y pagos, ordenado los pagos de menor a mayor.
+SELECT f.title, f.length as pelisCortas, a.first_name
+FROM customer c
+INNER JOIN address a on c.film_id = a.film_id
+INNER JOIN city ct on a.actor_id = ct.actor_id
+INNER JOIN country co on ct.actor_id = co.actor_id
+INNER JOIN rental r on c.actor_id = co.actor_id
+WHERE f.length < 100
+ORDER BY f.length ASC
+/*no terminado */
 
 
 
