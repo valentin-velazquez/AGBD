@@ -209,17 +209,50 @@ WHERE f.length < 100
 ORDER BY f.length ASC
 
 
-/*ACTIVIDAD 17*/
---apellido del cliente con su ciudad, pais, direccion, sus alquileres y pagos, ordenado los pagos de menor a mayor.
-SELECT f.title, f.length as pelisCortas, a.first_name
-FROM customer c
-INNER JOIN address a on c.film_id = a.film_id
-INNER JOIN city ct on a.actor_id = ct.actor_id
-INNER JOIN country co on ct.actor_id = co.actor_id
-INNER JOIN rental r on c.actor_id = co.actor_id
-WHERE f.length < 100
-ORDER BY f.length ASC
-/*no terminado */
+-Ejercicio 17
+SELECT c.last_name, ci.city, co.country, a.address, r.rental_date, sum(p.amount) as pagos  FROM customer c
+INNER JOIN address a
+on a.address_id = c.address_id
+INNER JOIN city ci
+on ci.city_id = a.city_id
+INNER JOIN country co
+on co.country_id = ci.country_id
+INNER JOIN rental r
+on r.customer_id = c.customer_id
+INNER JOIN payment p
+on p.rental_id = r.rental_id
+GROUP by c.last_name
+ORDER by pagos ASC
+
+--Ejercicio 18
+INSERT INTO actor(actor_id,first_name,last_name,last_update)
+VALUES(201,'Valentin','Velazquez','2025-04-24 10:53:57')
+
+--Ejercicio 19
+INSERT INTO actor(actor_id,first_name,last_name,last_update)
+VALUES(202,"Rosa","Melculo","2025-12-23 03:18:19"),(203,"Elver", "Galarga", "2025-10-01 09:13:39")
+
+
+
+--Ejercicio 20
+UPDATE actor
+SET first_name = "Edison", last_name = "Cavani", last_update = "2025-04-24 18:52:227"
+WHERE actor_id = 201  
+UPDATE actor
+SET first_name = "Lionel", last_name = "Messi", last_update = "2025-06-24 11:50:22"
+WHERE actor_id = 202
+UPDATE actor
+SET first_name = "Hugo", last_name = "Flores", last_update = "2025-08-27 10:20:28"
+WHERE actor_id = 203  
+
+
+--Ejercicio 21
+DELETE FROM actor
+WHERE actor_id = 203  
+DELETE FROM actor
+WHERE actor_id = 202
+DELETE FROM actor
+WHERE actor_id = 201
 
 
 
@@ -235,3 +268,5 @@ INNER JOIN film_category fc ON f.film_id = fc.film_id
 INNER JOIN category c ON fc.category_id = c.category_id 
 GROUP by film
 */
+
+
