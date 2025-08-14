@@ -91,6 +91,75 @@ def modificar_stock(stock_id):
 
 
 
+@app.route('/stock', methods=['GET'])
+
+
+
+def listar_usuarios():
+
+
+    db = get_db()
+
+
+    resultado = db.execute('SELECT * FROM Stock').fetchall()
+
+
+    return {
+
+
+        'Stock': [dict(row) for row in resultado]
+
+
+    }
+
+
+
+
+
+if __name__ == '__main__':
+
+
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/stock/agregar', methods=['POST'])
+
+
+def agregar():
+
+
+    data = request.get_json()#Le envia el request en formato json
+
+
+    db = get_db()
+
+
+    cursor = db.cursor()# el cursor es para ejecutar mejor las sentencias de sql 
+
+
+    cursor.execute(   'INSERT INTO Stock (Producto, Cantidad) VALUES (?, ?)',
+
+
+        (data['Producto'], data['Cantidad']))
+
+
+    
+
+
+    db.commit()#para guardar los cambios
+
+
+    return "funciono"
+
 
 
 
