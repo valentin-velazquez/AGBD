@@ -1,0 +1,97 @@
+
+
+import sqlite3
+from flask import Flask, g
+
+
+app = Flask(__name__, instance_relative_config=True)
+app.config['DATABASE'] = 'hamburgueseria.db'  # ruta a tu base de datos
+
+
+# Conexión a la base de datos
+def get_db():
+   if 'db' not in g:
+       g.db = sqlite3.connect(
+           app.config['DATABASE'],
+           detect_types=sqlite3.PARSE_DECLTYPES
+       )
+       g.db.row_factory = sqlite3.Row  # devuelve filas como diccionarios
+   return g.db
+
+
+# Cierra la conexión cuando termina la petición
+def close_db(e=None):
+   db = g.pop('db', None)
+
+
+   if db is not None:
+       db.close()
+
+
+
+
+@app.route('/stock')
+def listar_usuarios():
+   db = get_db()
+   resultado = db.execute('SELECT id_Stock FROM Stock').fetchall()
+   return {
+       'Stock': [dict(row) for row in resultado]
+   }
+
+
+if __name__ == '__main__':
+   app.run(debug=True)
+
+
+
+
+
+
+@app.route('/stock/<int:stock_id>', methods=['DELETE'])
+def eliminar_stock(stock_id):
+    db = get_db()
+    cursor = db.execute('DELETE FROM Stock WHERE id_Stock = ?', (stock_id,))
+    db.commit()  # Guardar cambios en la base de datos
+
+    if cursor.rowcount == 0:
+        return {'mensaje': 'No se encontró el registro'}, 404
+
+    return {'mensaje': f'Stock con ID {stock_id} eliminado correctamente'}
+
+
+
+# mas adelante modificar la ruta por que son las misma que la de borrar
+
+
+
+from flask import request
+
+@app.route('/stock/<int:stock_id>', methods=['PUT']) 
+def modificar_stock(stock_id):
+    datos = request.get_json()  # Recibe datos en formato JSON
+
+    # Validar que vengan los datos necesarios
+    if not datos or 'cantidad' not in datos:
+        return {'mensaje': 'Falta el campo cantidad'}, 400
+
+    nueva_cantidad = datos['cantidad']
+
+    db = get_db()
+    cursor = db.execute(
+        'UPDATE Stock SET cantidad = ? WHERE id_Stock = ?',
+        (nueva_cantidad, stock_id)
+    )
+    db.commit()
+
+    if cursor.rowcount == 0:
+        return {'mensaje': 'No se encontró el registro'}, 404
+
+    return {'mensaje': f'Stock con ID {stock_id} actualizado correctamente'}
+
+
+
+
+
+
+
+
