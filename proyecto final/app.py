@@ -7,10 +7,7 @@ app = Flask(__name__)
 
 
 
-
-
-
-#crea la conxion
+#crea la conexion
 def get_db():
    conn = mysql.connector.connect(**data)
    return conn
@@ -171,6 +168,41 @@ def inicio():
     else:
         return {'mensaje': 'Email o contraseña incorrectos'}, 401
 
+
+## borrar los datos del inicio de sesion 
+@app.route('/inicio/borrar/<int:id_usuarios>', methods=['DELETE'])
+def borrar_cuenta(id_usuarios):
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM Usuarios WHERE id_usuarios = %s', (id_usuarios,))
+    db.commit()
+    filas_afectadas = cursor.rowcount
+    cursor.close()
+    db.close()
+    if filas_afectadas == 0:
+        return {'mensaje': 'No se encontró el usuario'}, 404
+    return {'mensaje': f'Usuario con ID {id_usuarios} eliminado correctamente'}, 200
+
+
+
+
+
+
+##endpoint de las hamburguesas, que en un futuro se guia por el boton y muestra la 
+##hamburguesa. proxima clase verificar si esta bien con postman
+@app.route('/Productos/<string:nombre>', methods=['GET'])
+def obtener_producto(nombre):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    # Se busca el producto exacto por nombre
+    cursor.execute("SELECT * FROM Productos WHERE nombre = %s", (nombre,))
+    producto = cursor.fetchone()
+    cursor.close()
+    db.close()
+    if producto:
+        return jsonify({'Producto': producto}), 200
+    else:
+        return jsonify({'mensaje': 'Producto no encontrado'}), 404
 
 
 
